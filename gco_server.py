@@ -19,6 +19,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as GCOServerSocket:
     client_sock, addr = GCOServerSocket.accept()
     for frame in tg.get_frames():
         client_sock.sendall(frame)
-        time.sleep(8)
+        time.sleep(1)
     client_sock.close()
 

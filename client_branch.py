@@ -14,29 +14,33 @@ def client_branch(host, port, write_type='w'):
         trail = bytes()
         frames = []
         while True:
-            data = trail + client_sock.recv(p.BUF_SIZ)
-            parts = data.split(p.ETX)
-            trail = parts[-1]
             try:
-                frame = parts[-2][1:]
-                # print(frame.decode('cp1252'))
-                with open("{}_{}.dat".format(host, str(port)), write_type,
-                        encoding='cp1252') as f:
-                    f.write(frame.decode('cp1252'))
-            except IndexError:
+                data = trail + client_sock.recv(p.BUF_SIZ)
+                parts = data.split(p.ETX)
+                trail = parts[-1]
                 try:
-                    frame = frames[-1]
+                    frame = parts[-2].lstrip(p.STX)
+                    # print(frame.decode('cp1252'))
                     with open("{}_{}.dat".format(host, str(port)), write_type,
                             encoding='cp1252') as f:
                         f.write(frame.decode('cp1252'))
                 except IndexError:
-                    pass
-            finally:
-                try:
-                    for bytestr in parts[:-3]:
-                        frames.append(bytestr)
-                except IndexError:
-                    pass
+                    try:
+                        frame = frames[-1].lstrip(p.STX)
+                        with open("{}_{}.dat".format(host, str(port)), write_type,
+                                encoding='cp1252') as f:
+                            f.write(frame.decode('cp1252'))
+                    except IndexError:
+                        pass
+                finally:
+                    try:
+                        for bytestr in parts[:-3]:
+                            frames.append(bytestr)
+                    except IndexError:
+                        pass
+            except KeyboardInterrupt:
+                client_sock.close()
+                break
 
 
 if __name__ == "__main__":

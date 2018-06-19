@@ -15,8 +15,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tdacs:
         parts = data.split(p.ETX)
         trail = parts[-1]
         try:
-            frame = parts[-2][1:]
+            frame = parts[-2].lstrip(p.STX)
             print(frame.decode('cp1252'))
         except IndexError:
             pass
+        except KeyboardInterrupt:
+            tdacs.close()
+            break
 
