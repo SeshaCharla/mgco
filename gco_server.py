@@ -2,16 +2,23 @@
 # author: SaiChrla
 
 
-import socketserver
-from ... import primitives.handlers as h
-from ... import primitives.protocol as p
-import threading
+import socket
+import gctestframes as tg
+import protocol
+import time
 
-GcoServer = socketserver.ThreadingTCPServer(p.TEST_ADDR, h.SendTestData)
-with GcoServer:
-    ip, port = GcoServer.server_address
-    # start the server in a thread which creats thread for eac client processes
-    GcoServer_thread = threading.Thread(target=GcoServer.serve_forever)
-    GcoServer_thread.daemon = True
-    server_thread.start()
+
+HOST = protocol.TEST_HOST
+PORT = protocol.TEST_PORT
+ADDR = (HOST, PORT)
+
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as GCOServerSocket:
+    GCOServerSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    GCOServerSocket.bind(ADDR)
+    GCOServerSocket.listen()
+    client_sock, addr = GCOServerSocket.accept()
+    for frame in tg.get_frames():
+        client_sock.sendall(frame)
+        time.sleep(8)
+    client_sock.close()
 

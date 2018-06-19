@@ -11,8 +11,8 @@ class Client:
     """ General class for clinet sockets with given protocol"""
 
     def __init__(self, server_addr):
-        self.socket = socket.socket(socket.AF_INET, socket.SOC_STREAM)
-        self.sockket.connect(server_addr)
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.connect(server_addr)
         self.trail = bytes()
         self.frame = bytes()
 

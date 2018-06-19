@@ -2,8 +2,21 @@
 # author: SaiChrla
 
 
-import mgco.primitives.sockets as sock
+import socket
+import protocol as p
+import time
 
-tdacsClient = sock.Client(TEST_ADDR)
-tdacsClient.recv_data()
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tdacs:
+    tdacs.connect(p.TEST_ADDR)
+    frame = bytes()
+    trail = bytes()
+    while True:
+        data = trail + tdacs.recv(p.BUF_SIZ)
+        parts = data.split(p.ETX)
+        trail = parts[-1]
+        try:
+            frame = parts[-2][1:]
+            print(frame.decode('cp1252'))
+        except IndexError:
+            pass
 
