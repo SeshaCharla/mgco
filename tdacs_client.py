@@ -5,9 +5,12 @@
 import socket
 import protocol as p
 import time
+import config
+
+ADDR, s = config.pipeline_config()
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tdacs:
-    tdacs.connect(p.TEST_ADDR)
+    tdacs.connect(ADDR)
     frame = bytes()
     trail = bytes()
     while True:

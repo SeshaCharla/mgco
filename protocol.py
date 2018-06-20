@@ -15,12 +15,14 @@ DATA_FRAME = bytes('\xbb', 'cp1252')
 DB_FRAME = bytes('\xcc', 'cp1252')
 INVALID = bytes('\x00', 'cp1252')
 
+DATA = True
+DB = False
 
 # Buffer Size
 BUF_SIZ = 4096  # 4 MB
 
 
-def creatheader(noparms, frametype):
+def creatheader(nparms, frametype):
     """ Creates the header for the data"""
     t = dt.datetime.now()
     b = lambda x,n=2: bytes(str(x), encoding='cp1252').rjust(n, '0'.encode('cp1252'))
@@ -31,7 +33,15 @@ def creatheader(noparms, frametype):
     mins = b(t.minute)
     sec = b(t.second)
     # ddmmyyyyhhmmss000
-    timestr = day+month+year+hr+mins+sec+'000'.encode('cp1252')
+    timebytes = day+month+year+hr+mins+sec+'000'.encode('cp1252')
+    if frametype:
+        frametypebyte = DATA_FRAME
+    else:
+        frametypebyte = DB_FRAME
+    nparmsbytes = b(nparms, n=4)
+    return frametypebyte + timebytes + nparmsbytes + (' '*5).encode('cp1252')
+
+
 
 
 
@@ -44,16 +54,14 @@ class GCFrame:
     # frame[22:27] = white spaces
     # frame[27:] = data
 
-    DATA = True
-    DB = False
 
-    def __init__(self, noparms):
+    def __init__(self, nparms):
         """Initial the gco-data object"""
-        self.noparms = noparms
-        self.invalid_data = no_of_params * bytes('+0000999', encoding='cp1252')
+        self.nparms = nparms
+        self.invalid_data = self.nparms * bytes('+0000999', encoding='cp1252')
         self.old_timestamp = dt.datetime.now()
         self.type = DATA
-        self.data = bytes(noparams, encoding='cp1252')
+        self.data = bytes(''*nparms, encoding='cp1252')
 
     def update_frame(self, frame):
         """ update the gc-frame attributes """
@@ -67,7 +75,7 @@ class GCFrame:
     def invalid(self, frame):
         """ Returns the truth value of invalidity"""
         if (self.get_timestamp(frame) <= self.old_timestamp and
-            self.get_noparms() != self.noparams):
+            self.get_nparms(frame) != self.nparms):
             return True
         else:
             return False
@@ -75,17 +83,17 @@ class GCFrame:
     def set_invalid(self):
         """Makes the frame invalid"""
         self.data = self.invalid_data
-        self.type = None
+        self.type = DATA
 
-    def get_noparms(self, frame):
+    def get_nparms(self, frame):
         """Get the no. of parameters"""
         try:
             return len(self.get_data(frame))/8
         except:
             return 0
 
-    def check_parms(self, frame):
-        """ Check if the params are same"""
+    def check_nparms(self, frame):
+        """ Check if the parms are same"""
         try:
             return len(self.get_data(frame))/8 == int(frame[18:22])
         except:
@@ -107,20 +115,22 @@ class GCFrame:
             elif d == DB_FRAME :
                 self.type = DB
             else:
-                self.type = None
+                self.type = DATA
         except:
-            self.type = None
+            self.type = DATA
 
     def get_timestamp(self, frame):
         """Gets the time stamp of the frame"""
-        timestr = frame[1:18].decode('cp1252')
-        # ddmmyyyyhhmmss000
-        day = int(timestr[0:2])
-        month = int(timestr[2:4])
-        year = int(timestr[4:8])
-        hour = int(timestr[8:10])
-        mins = int(timestr[10:12])
-        sec = int(timestr[12:14])
-        ms = int(timestr[14:17])
-        return dt.datetime(year, month, day, hour, mins, sec, ms)
-
+        try:
+            timestr = frame[1:18].decode('cp1252')
+            # ddmmyyyyhhmmss000
+            day = int(timestr[0:2])
+            month = int(timestr[2:4])
+            year = int(timestr[4:8])
+            hour = int(timestr[8:10])
+            mins = int(timestr[10:12])
+            sec = int(timestr[12:14])
+            ms = int(timestr[14:17])
+            return dt.datetime(year, month, day, hour, mins, sec, ms)
+        except:
+            return self.old_timestamp
