@@ -25,6 +25,21 @@ TEST_ADDR = (TEST_HOST, TEST_PORT)
 BUF_SIZ = 4096  # 4 MB
 
 
+def creatheader(noparms, frametype):
+    """ Creates the header for the data"""
+    t = dt.datetime.now()
+    b = lambda x,n=2: bytes(str(x), encoding='cp1252').rjust(n, '0'.encode('cp1252'))
+    year = b(t.year, n=4)
+    month = b(t.month)
+    day = b(t.day)
+    hr = b(t.hour)
+    mins = b(t.minute)
+    sec = b(t.second)
+    # ddmmyyyyhhmmss000
+    timestr = day+month+year+hr+mins+sec+'000'.encode('cp1252')
+
+
+
 class GCFrame:
     """frame objects for storing current data"""
     # Frame details (Afterf stripping STX and ETX):
@@ -65,6 +80,7 @@ class GCFrame:
     def set_invalid(self):
         """Makes the frame invalid"""
         self.data = self.invalid_data
+        self.type = None
 
     def get_noparms(self, frame):
         """Get the no. of parameters"""
@@ -108,8 +124,8 @@ class GCFrame:
         month = int(timestr[2:4])
         year = int(timestr[4:8])
         hour = int(timestr[8:10])
-        min = int(timestr[10:12])
+        mins = int(timestr[10:12])
         sec = int(timestr[12:14])
         ms = int(timestr[14:17])
-        return dt.datetime(year, month, day, hour, min, sec, ms)
+        return dt.datetime(year, month, day, hour, mins, sec, ms)
 
