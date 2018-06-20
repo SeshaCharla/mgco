@@ -27,25 +27,29 @@ BUF_SIZ = 4096  # 4 MB
 
 class GCFrame:
     """frame objects for storing current data"""
+    # Frame details (Afterf stripping STX and ETX):
+    # frame[0] = frame type (DATA, DB)
+    # frame[1:18] = time stamp
+    # frame[18:22] = no. of parms
+    # frame[22:27] = white spaces
+    # frame[27:] = data
+
     DATA = True
     DB = False
 
-    __init__(self, noparms):
+    def __init__(self, noparms):
         """Initial the gco-data object"""
         self.noparms = noparms
-        self.timestr = bytes(17, encoding='cp1252')
-        self.paramsstr = bytes(4, encoding=)
-        self.data = bytes(noparams, encoding='cp1252'))
         self.invalid_data = no_of_params * bytes('+0000999', encoding='cp1252')
         self.old_timestamp = dt.datetime.now()
         self.type = DATA
+        self.data = bytes(noparams, encoding='cp1252'))
 
     def update_frame(self, frame):
         """ update the gc-frame attributes """
         if self.invalid(frame):
             self.set_invalid()
         else:
-            self.header = self.get_header(frame)     #frame[1:22]
             self.data = self.get_data(frame)    #frame[27:]
             self.set_type(frame)
             self.old_timestamp = self.get_timestamp(frame)
@@ -72,7 +76,7 @@ class GCFrame:
     def check_parms(self, frame):
         """ Check if the params are same"""
         try:
-            return len(self.get_data(frame))/8 == int(self.get_header()[-4:])
+            return len(self.get_data(frame))/8 == int(frame[18:22])
         except:
             return False
 
@@ -81,19 +85,31 @@ class GCFrame:
         try:
             return frame[27:]
         except:
-            self.invalid_data
+            return self.invalid_data
 
-    def get_header(self, frame):
-        """ Get the header from the data"""
+    def set_type(self, frame):
+        """ set the type of frame"""
         try:
-            return frame[1:27]
+            d = frame[0]
+            if d = DATA_FRAME :
+                self.type = DATA
+            elif d = DB_FRAME :
+                self.type = DB
+            else:
+                self.type = None
         except:
-            return bytes(27)
+            self.type = None
 
-
-
-
-
-
-
+    def get_timestamp(self, frame):
+        """Gets the time stamp of the frame"""
+        timestr = frame[1:18].decode('cp1252')
+        # ddmmyyyyhhmmss000
+        day = int(timestr[0:2])
+        month = int(timestr[2:4])
+        year = int(timestr[4:8])
+        hour = int(timestr[8:10])
+        min = int(timestr[10:12])
+        sec = int(timestr[12:14])
+        ms = int(timestr[14:17])
+        return dt.datetime(year, month, day, hour, min, sec, ms)
 
