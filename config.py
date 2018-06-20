@@ -18,7 +18,23 @@ def get_config():
         n = len(nparms)
         return n, addrs, nparms
 
+def pipeline_config():
+    """get the pipeline server addresses sleep time from pipeline.conf"""
+    with open('pipeline.conf') as f:
+        s = f.readlines()
+        for line in s:
+            if line[0] != '#':
+                line.lstrip('\n')
+                d = line.split(',')
+                addr = (d[0], int(d[1]))
+                sleeptime = int(d[2])
+        return addr, sleeptime
+
+
+
+
 
 if __name__ == "__main__":
     print(get_config())
+    print(pipeline_config())
 

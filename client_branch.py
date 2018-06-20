@@ -4,12 +4,15 @@
 
 import socket
 import protocol as p
+from multiprocessing import Process, Lock
+import config
 
-def client_branch(host, port):
+
+def client_branch(addr, lock):
     """Starts a client to a server and writes the received data in to a
     file"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_sock:
-        client_sock.connect((host, port))
+        client_sock.connect(addr)
         frame = bytes()
         trail = bytes()
         frames = []
@@ -21,12 +24,12 @@ def client_branch(host, port):
                 try:
                     frame = parts[-2].lstrip(p.STX)
                     # print(frame.decode('cp1252'))
-                    filewrite(frame, host, port)
+                    filelockwrite(frame, addr, lock)
                     frames = []    # clear the old frames
                 except IndexError:
                     try:
                         frame = frames[-1].lstrip(p.STX)
-                        filewrite(frame, host, port)
+                        filelockwrite(frame, addr, lock)
                         frames = []    # clear the old frames
                     except IndexError:
                         pass
@@ -41,13 +44,29 @@ def client_branch(host, port):
                 break
 
 
-def filewrite(frame, host, port):
+def filewrite(frame, addr):
     """writes the fframe in to file named after the sddress"""
-    with open("{}_{}.dat".format(host, str(port)), 'w',
+    with open("{}_{}.dat".format(addr[0], str(addr[1])), 'w',
             encoding='cp1252') as f:
         f.write(frame.decode('cp1252'))
 
 
-if __name__ == "__main__":
-    client_branch(p.TEST_HOST, p.TEST_PORT)
+def filelockwrite(frame, addr, lock):
+    """writes to a file with appropriate lock"""
+    with lock:
+        filewrite(frame, addr)
 
+
+def setup_clientbranches(n, addrs, lock_list):
+    """sets up the required no. of client branches """
+    Clients = [Process(target=client_branch, args=(addrs[i],lock_list[i])) for
+            i in range(n)]
+    for client in Clients :
+        client.start()
+
+
+if __name__ == "__main__" :
+
+    n, addrs, nparms = config.get_config()
+    lock_list = [Lock() for i in range(n)]
+    setup_clientbranches(n, addrs, lock_list)

@@ -16,11 +16,6 @@ DB_FRAME = bytes('\xcc', 'cp1252')
 INVALID = bytes('\x00', 'cp1252')
 
 
-#Test local address
-TEST_HOST = '127.0.0.1'
-TEST_PORT = 4040
-TEST_ADDR = (TEST_HOST, TEST_PORT)
-
 # Buffer Size
 BUF_SIZ = 4096  # 4 MB
 
