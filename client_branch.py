@@ -5,7 +5,7 @@
 import socket
 import protocol as p
 
-def client_branch(host, port, write_type='w'):
+def client_branch(host, port):
     """Starts a client to a server and writes the received data in to a
     file"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_sock:
@@ -21,16 +21,12 @@ def client_branch(host, port, write_type='w'):
                 try:
                     frame = parts[-2].lstrip(p.STX)
                     # print(frame.decode('cp1252'))
-                    with open("{}_{}.dat".format(host, str(port)), write_type,
-                            encoding='cp1252') as f:
-                        f.write(frame.decode('cp1252'))
+                    filewrite(frame, host, port)
                     frames = []    # clear the old frames
                 except IndexError:
                     try:
                         frame = frames[-1].lstrip(p.STX)
-                        with open("{}_{}.dat".format(host, str(port)), write_type,
-                                encoding='cp1252') as f:
-                            f.write(frame.decode('cp1252'))
+                        filewrite(frame, host, port)
                         frames = []    # clear the old frames
                     except IndexError:
                         pass
@@ -43,6 +39,13 @@ def client_branch(host, port, write_type='w'):
             except KeyboardInterrupt:
                 client_sock.close()
                 break
+
+
+def filewrite(frame, host, port):
+    """writes the fframe in to file named after the sddress"""
+    with open("{}_{}.dat".format(host, str(port)), 'w',
+            encoding='cp1252') as f:
+        f.write(frame.decode('cp1252'))
 
 
 if __name__ == "__main__":

@@ -58,7 +58,7 @@ class GCFrame:
         self.invalid_data = no_of_params * bytes('+0000999', encoding='cp1252')
         self.old_timestamp = dt.datetime.now()
         self.type = DATA
-        self.data = bytes(noparams, encoding='cp1252'))
+        self.data = bytes(noparams, encoding='cp1252')
 
     def update_frame(self, frame):
         """ update the gc-frame attributes """
@@ -107,9 +107,9 @@ class GCFrame:
         """ set the type of frame"""
         try:
             d = frame[0]
-            if d = DATA_FRAME :
+            if d == DATA_FRAME :
                 self.type = DATA
-            elif d = DB_FRAME :
+            elif d == DB_FRAME :
                 self.type = DB
             else:
                 self.type = None
