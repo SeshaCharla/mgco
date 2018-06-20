@@ -7,6 +7,8 @@ protocol. cp1252 encoding is used as '\xbb' and '\xcc' are represented by
 corresponding hex nos. unlike utf-8 where is split in to 2 nos. """
 
 import datetime as dt
+import random as r
+
 
 # Frame Headers
 STX = bytes('\x02', 'cp1252')
@@ -20,6 +22,18 @@ DB = False
 
 # Buffer Size
 BUF_SIZ = 4096  # 4 MB
+
+
+def get_frame(nparms):
+    """ Randomly creats the frame"""
+    s = lambda: '+'.encode('cp1252') if r.random()>0.5 else '-'.encode('cp1252')
+    n = lambda: (str(round(75*r.random(), 2)).encode('cp1252')).rjust(7,
+            '0'.encode('cp1252'))
+    data = bytes()
+    for i in range(nparms):
+        data = data + s() + n()
+    header = creatheader(nparms, DATA)
+    return STX + header + data + ETX
 
 
 def creatheader(nparms, frametype):
