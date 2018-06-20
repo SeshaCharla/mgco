@@ -6,6 +6,7 @@ import threading
 import client_branch as c
 
 host_list = []
+client_branch_thread = []
 
 for address in host_list:
     client_branch_thread.append(threading.Thread(target=c.client_branch,

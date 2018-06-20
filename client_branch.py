@@ -24,12 +24,14 @@ def client_branch(host, port, write_type='w'):
                     with open("{}_{}.dat".format(host, str(port)), write_type,
                             encoding='cp1252') as f:
                         f.write(frame.decode('cp1252'))
+                    frames = []    # clear the old frames
                 except IndexError:
                     try:
                         frame = frames[-1].lstrip(p.STX)
                         with open("{}_{}.dat".format(host, str(port)), write_type,
                                 encoding='cp1252') as f:
                             f.write(frame.decode('cp1252'))
+                        frames = []    # clear the old frames
                     except IndexError:
                         pass
                 finally:
