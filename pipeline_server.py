@@ -30,17 +30,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as PipelineSocket:
                 range(n)]
         for i in range(n):
             GC_list[i].update_frame(frame_list[i])
-        ftypes = [gc.type for gc in GC_list]
-        pprint(ftypes)
-        if all(ftypes):
-            frametype = p.DATA
-        if not all(ftypes):
-            frametype = p.DB
-        else:
-            frametype = p.DATA
-            #for gc in GC_list:
-             #   if not gc.type:
-              #      gc.set_invalid()
+        frametype = p.setframetype(GC_list)
         nparms = sum(nparms_list)
         headerbytes = p.creatheader(nparms, frametype)
         data_list = [gc.data for gc in GC_list]

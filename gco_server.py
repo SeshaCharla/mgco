@@ -4,7 +4,7 @@
 
 import socket
 import gctestframes as tg
-import protocol
+import protocol as p
 import time
 
 

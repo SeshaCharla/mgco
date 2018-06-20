@@ -42,7 +42,16 @@ def creatheader(nparms, frametype):
     return frametypebyte + timebytes + nparmsbytes + (' '*5).encode('cp1252')
 
 
-
+def setframetype(GC_list):
+    """ Sets the frame type for the concatenated frame"""
+    ftypes = [gc.type for gc in GC_list]
+    if any(ftypes):
+        for gc in GC_list:
+            if not gc.type:
+                gc.set_invalid()
+        return DATA
+    else:
+        return DB
 
 
 class GCFrame:
@@ -59,7 +68,7 @@ class GCFrame:
         """Initial the gco-data object"""
         self.nparms = nparms
         self.invalid_data = self.nparms * bytes('+0000999', encoding='cp1252')
-        self.old_timestamp = dt.datetime.now()
+        self.old_timestamp = dt.datetime(2018, 4, 22)
         self.type = DATA
         self.data = bytes(''*nparms, encoding='cp1252')
 
