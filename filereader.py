@@ -7,11 +7,15 @@ def readfile(addr):
     file_name = '{}_{}.dat'.format(addr[0], str(addr[1]))
     with open(file_name, 'r', encoding='cp1252') as f:
         frame = f.read()
-    return frame
+    return frame.encode('cp1252')
 
 
 def filelockread(addr, lock):
     """ Reads a file with apropriate lock"""
-    with lock:
-        readfile(addr)
+    file_name = '{}_{}.dat'.format(addr[0], str(addr[1]))
+    with open(file_name, 'r', encoding='cp1252') as f:
+        with lock:
+            frame = f.read()
+    return frame.encode('cp1252')
+
 

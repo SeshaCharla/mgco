@@ -28,14 +28,18 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as PipelineSocket:
     while True:
         frame_list = [fl.filelockread(addr_list[i], lock_list[i]) for i in
                 range(n)]
+        pprint(frame_list)
         for i in range(n):
             GC_list[i].update_frame(frame_list[i])
         frametype = p.setframetype(GC_list)
         nparms = sum(nparms_list)
         headerbytes = p.creatheader(nparms, frametype)
         data_list = [gc.data for gc in GC_list]
-        data = bytes().join(data_list)
+        data = bytes()
+        for line in data_list:
+            data = data+line
+        pprint(data)
         frame = p.STX + headerbytes + data + p.ETX
+        pprint(frame)
         tdacs_sock.sendall(frame)
         time.sleep(SLEEP_TIME)
-

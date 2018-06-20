@@ -23,7 +23,6 @@ def client_branch(addr, lock):
                 trail = parts[-1]
                 try:
                     frame = parts[-2].lstrip(p.STX)
-                    # print(frame.decode('cp1252'))
                     filelockwrite(frame, addr, lock)
                     frames = []    # clear the old frames
                 except IndexError:
@@ -53,8 +52,10 @@ def filewrite(frame, addr):
 
 def filelockwrite(frame, addr, lock):
     """writes to a file with appropriate lock"""
-    with lock:
-        filewrite(frame, addr)
+    with open("{}_{}.dat".format(addr[0], str(addr[1])), 'w',
+            encoding='cp1252') as f:
+        with lock:
+            f.write(frame.decode('cp1252'))
 
 
 def setup_clientbranches(n, addrs, lock_list):
