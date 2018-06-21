@@ -25,4 +25,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as tdacs:
         except KeyboardInterrupt:
             tdacs.close()
             break
+        except ConnectionError:
+            tdacs.close()
 

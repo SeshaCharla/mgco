@@ -41,6 +41,9 @@ def client_branch(addr, lock):
             except KeyboardInterrupt:
                 client_sock.close()
                 break
+            except:
+                time.sleep(10)
+                client_branch(addr, lock)       # Restart the client server
 
 
 def filewrite(frame, addr):
@@ -51,7 +54,7 @@ def filewrite(frame, addr):
 
 
 def filelockwrite(frame, addr, lock):
-    """writes to a file with appropriate lock"""
+    """writes to a file to a file named after address with appropriate lock"""
     with open("{}_{}.dat".format(addr[0], str(addr[1])), 'w',
             encoding='cp1252') as f:
         with lock:
@@ -68,6 +71,6 @@ def setup_clientbranches(n, addrs, lock_list):
 
 if __name__ == "__main__" :
 
-    n, addrs, nparms = config.get_config()
+    n, addrs, nparms, st_list = config.get_config()
     lock_list = [Lock() for i in range(n)]
     setup_clientbranches(n, addrs, lock_list)

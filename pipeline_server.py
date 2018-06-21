@@ -11,7 +11,7 @@ import client_branch as cb
 from pprint import pprint
 
 
-n, addr_list, nparms_list = config.get_config()      # Configuration
+n, addr_list, nparms_list, st_list = config.get_config()      # Configuration
 lock_list = [Lock() for i in range(n)]     # locks for file I/O
 GC_list = [p.GCFrame(nparms) for nparms in nparms_list]   # List of GC frames
 ADDR, SLEEP_TIME = config.pipeline_config()    # Address and sleeptime pipeline
@@ -25,10 +25,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as PipelineSocket:
     PipelineSocket.bind(ADDR)
     PipelineSocket.listen()
     tdacs_sock, address = PipelineSocket.accept()
+    print("Connected to {}:{}".format(address[0],address[1]))
     while True:
         frame_list = [fl.filelockread(addr_list[i], lock_list[i]) for i in
                 range(n)]
-        pprint(frame_list)
         for i in range(n):
             GC_list[i].update_frame(frame_list[i])
         frametype = p.setframetype(GC_list)
@@ -38,8 +38,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as PipelineSocket:
         data = bytes()
         for line in data_list:
             data = data+line
-        pprint(data)
         frame = p.STX + headerbytes + data + p.ETX
-        pprint(frame)
         tdacs_sock.sendall(frame)
         time.sleep(SLEEP_TIME)

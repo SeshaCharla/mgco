@@ -30,8 +30,9 @@ def get_frame(nparms):
     n = lambda: (str(round(75*r.random(), 2)).encode('cp1252')).rjust(7,
             '0'.encode('cp1252'))
     data = bytes()
-    for i in range(nparms):
-        data = data + s() + n()
+    if r.random() > 0.5:
+        for i in range(nparms):
+            data = data + s() + n()
     header = creatheader(nparms, DATA)
     return STX + header + data + ETX
 
