@@ -1,0 +1,15 @@
+mgco
+
+--> Abstract
+--> Introduction
+	-- Need Justification
+	-- Scope of the project
+--> Application Architecture
+	-- Overall signal-flow block diagram
+	-- Design principles
+--> Source Code Documentation
+	-- Description of every function and script
+--> Future scope
+--> References
+--> Appendix A: Insruction for running the program
+--> Appendix B: Ground Checkout communication protocol
