@@ -31,8 +31,8 @@ def get_frame(nparms):
             '0'.encode('cp1252'))
     data = bytes()
     # if r.random() > 0.5:
-    for i in range(nparms):
-        data = data + s() + n()
+    # for i in range(nparms):
+      #   data = data + s() + n()
     header = creatheader(nparms, DATA)
     return STX + header + data + ETX
 
@@ -128,7 +128,7 @@ class GCFrame:
         try:
             return frame[27:]
         except:
-            return self.invalid_data
+            return bytes()
 
     def set_type(self, frame):
         """ set the type of frame"""
