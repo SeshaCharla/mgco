@@ -30,13 +30,13 @@ class PipelineServer:
                     socket.SO_REUSEADDR, 1)
             self.PipelineSocket.bind(self.ADDR)
             while True:
-                    self.PipelineSocket.listen()
-                    print("listening for connection at {}:{}".format(self.ADDR[0],
-                        str(self.ADDR[1])))
-                    tdacs_sock, address = self.PipelineSocket.accept()
-                    print("Connected to {}:{}".format(address[0],str(address[1])))
-                    print("Sending data to {}:{}".format(address[0],str(address[1])))
-                    self.handle_tdacs(tdacs_sock)
+                self.PipelineSocket.listen()
+                print("listening for connection at {}:{}".format(self.ADDR[0],
+                    str(self.ADDR[1])))
+                tdacs_sock, address = self.PipelineSocket.accept()
+                print("Connected to {}:{}".format(address[0],str(address[1])))
+                print("Sending data to {}:{}".format(address[0],str(address[1])))
+                self.handle_tdacs(tdacs_sock)
 
     def handle_tdacs(self, tdacs_sock):
         """ Handles the tdacs client """
