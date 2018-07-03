@@ -18,17 +18,7 @@ def client_branch(addr, lock, st):
         frame = bytes()
         trail = bytes()
         frames = []
-        try:
-            client_sock.connect(addr)
-        except KeyboardInterrupt:
-            client_sock.close()
-        except ConnectionRefusedError:
-            client_sock.close()
-            print("ConnectionRefusedError: GCO Server not responding")
-            time.sleep(st)
-            print("Restarting the client to {}".format(addr[0]))
-            client_branch(addr, lock, st)       # Restart the client server
-
+        client_sock.connect(addr)
         while True:
             try:
                 data = trail + client_sock.recv(p.BUF_SIZ)
@@ -51,21 +41,28 @@ def client_branch(addr, lock, st):
                             frames.append(bytestr)
                     except IndexError:
                         pass
-            except KeyboardInterrupt:
+            except:
                 client_sock.close()
-                break
-            except OSError:
-                client_sock.close()
-                print("TimeOutError: GCO Server not responding")
-                time.sleep(st)
-                print("Restarting the client to {}".format(addr[0]))
-                client_branch(addr, lock, st)       # Restart the client server
-                break    # else the falulty while loop wil not break with 1 key
+                raise
+
+
+def inf_client_branch(addr, lock, st):
+    """Runs the client branch function and handles other exceptions"""
+    while True:
+        try:
+            client_branch(addr, lock, st)
+        except OSError or ConnectionError:
+            print("TimeOutError: GCO Server not responding")
+            time.sleep(st)
+            print("Restarting the client to {}".format(addr[0]))
+            continue
+        except KeyboardInterrupt:
+            break
 
 
 def setup_clientbranches(n, addrs, lock_list, st_list):
     """sets up the required no. of client branches """
-    Clients = [Process(target=client_branch, args=(addrs[i],lock_list[i],
+    Clients = [Process(target=inf_client_branch, args=(addrs[i],lock_list[i],
         st_list[i])) for i in range(n)]
     for client in Clients :
         client.start()
