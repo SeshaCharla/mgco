@@ -6,7 +6,7 @@ import time
 import protocol as p
 from multiprocessing import Lock
 import config
-import filereader as fl
+from filelockio import filelockread
 import client_branch as cb
 
 class PipelineServer:
@@ -42,7 +42,7 @@ class PipelineServer:
         """ Handles the tdacs client """
         while True:
             try:
-                frame_list = [fl.filelockread(self.addr_list[i], self.lock_list[i])
+                frame_list = [filelockread(self.addr_list[i], self.lock_list[i])
                         for i in range(self.n)]
                 for i in range(self.n):
                     self.GC_list[i].update_frame(frame_list[i])

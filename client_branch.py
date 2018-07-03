@@ -6,7 +6,7 @@ import socket
 import protocol as p
 from multiprocessing import Process, Lock
 import config
-
+from filelockio import filelockwrite
 
 def client_branch(addr, lock):
     """Starts a client to a server and writes the received data in to a
@@ -44,21 +44,6 @@ def client_branch(addr, lock):
             except:
                 time.sleep(10)
                 client_branch(addr, lock)       # Restart the client server
-
-
-def filewrite(frame, addr):
-    """writes the fframe in to file named after the sddress"""
-    with open("{}_{}.dat".format(addr[0], str(addr[1])), 'w',
-            encoding='cp1252') as f:
-        f.write(frame.decode('cp1252'))
-
-
-def filelockwrite(frame, addr, lock):
-    """writes to a file to a file named after address with appropriate lock"""
-    with open("{}_{}.dat".format(addr[0], str(addr[1])), 'w',
-            encoding='cp1252') as f:
-        with lock:
-            f.write(frame.decode('cp1252'))
 
 
 def setup_clientbranches(n, addrs, lock_list):
