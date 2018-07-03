@@ -131,7 +131,7 @@ class Frame:
     def __init__(self, frame):
         """ Initiates the frame object with all the attributes"""
         self.type = get_type(frame)
-        self.timestamp = get_tiemstamp(frame)
+        self.timestamp = get_timestamp(frame)
         self.data = get_data(frame)
         self.hnparms = get_hnparms(frame)
 

@@ -57,6 +57,7 @@ class PipelineServer:
                 time.sleep(self.SLEEP_TIME)
             except:
                 tdacs_sock.close()
+                raise
                 break
 
 

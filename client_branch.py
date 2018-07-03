@@ -14,7 +14,7 @@ def client_branch(addr, lock, st):
     """Starts a client to a server and writes the received data in to a
     file"""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_sock:
-        client_sock.settimeout(st)
+        client_sock.settimeout(3*st)
         frame = bytes()
         trail = bytes()
         frames = []
