@@ -1,4 +1,2 @@
-invalid data is not converted to +0000999.
-Add DB frame checking in the GCFrame class in protocol.py
 client_branch.py -- make the function such that it can restart automatically
 	when the gco server is restarted.
