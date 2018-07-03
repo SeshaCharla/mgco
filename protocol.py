@@ -71,13 +71,6 @@ def setframetype(GC_list):
 
 class GCFrame:
     """frame objects for storing current data"""
-    # Frame details (Afterf stripping STX and ETX):
-    # frame[0] = frame type (DATA, DB)
-    # frame[1:18] = time stamp
-    # frame[18:22] = no. of parms
-    # frame[22:27] = white spaces
-    # frame[27:] = data
-
 
     def __init__(self, nparms):
         """Initial the gco-data object"""
@@ -89,19 +82,21 @@ class GCFrame:
 
     def update_frame(self, frame):
         """ update the gc-frame attributes """
-        if self.invalid(frame):
-            self.set_invalid()
-        else:
-            self.data = self.get_data(frame)    #frame[27:]
-            self.set_type(frame)
-            self.old_timestamp = self.get_timestamp(frame)
+        fr = Frame(frame)
+        if self.valid(fr):
+            self.data = fr.data
+            self.type = fr.type
+            self.old_timestamp = fr.timestamp
 
-    def invalid(self, frame):
-        """ Returns the truth value of invalidity"""
-        if (self.get_timestamp(frame) <= self.old_timestamp and
-            self.get_nparms(frame) != self.nparms):
-            return True
         else:
+            self.set_invalid()
+
+
+    def valid(self, fr):
+        """ Returns the truth value of invalidity"""
+        try:
+            return ((fr.timestamp > self.old_timestamp) and self.crnprms())
+        except:
             return False
 
     def set_invalid(self):
@@ -109,50 +104,78 @@ class GCFrame:
         self.data = self.invalid_data
         self.type = DATA
 
-    def get_nparms(self, frame):
-        """Get the no. of parameters"""
-        try:
-            return len(self.get_data(frame))/8
-        except:
-            return 0
 
-    def check_nparms(self, frame):
+    def crnparms(self, fr):
         """ Check if the parms are same"""
         try:
-            return len(self.get_data(frame))/8 == int(frame[18:22])
+            if fr.type:
+                return len(fr.data)//8 == self.nparms
+            else:
+                return len(fr.data)//25 == self.nprms
         except:
             return False
 
-    def get_data(self, frame):
-        """ Get the data part of the frame"""
-        try:
-            return frame[27:]
-        except:
-            return bytes()
 
-    def set_type(self, frame):
-        """ set the type of frame"""
-        try:
-            d = frame[0]
-            if d == DB_FRAME :
-                self.type = DB
-            else:
-                self.type = DATA
-        except:
-            self.type = DATA
+class Frame:
+    """ no nonsense frame class """
+    # Frame details (Afterf stripping STX and ETX):
+    # frame[0] = frame type (DATA, DB)
+    # frame[1:18] = time stamp
+    # frame[18:22] = no. of parms
+    # frame[22:27] = white spaces
+    # frame[27:] = data
+    # if DATA: len = 8 bytes
+    # if DB: len = 25 bytes
 
-    def get_timestamp(self, frame):
-        """Gets the time stamp of the frame"""
-        try:
-            timestr = frame[1:18].decode('cp1252')
-            # ddmmyyyyhhmmss000
-            day = int(timestr[0:2])
-            month = int(timestr[2:4])
-            year = int(timestr[4:8])
-            hour = int(timestr[8:10])
-            mins = int(timestr[10:12])
-            sec = int(timestr[12:14])
-            ms = int(timestr[14:17])
-            return dt.datetime(year, month, day, hour, mins, sec, ms)
-        except:
-            return self.old_timestamp
+
+    def __init__(self, frame):
+        """ Initiates the frame object with all the attributes"""
+        self.type = get_type(frame)
+        self.timestamp = get_tiemstamp(frame)
+        self.data = get_data(frame)
+        self.hnparms = get_hnparms(frame)
+
+
+def get_timestamp(frame):
+    """Gets the time stamp of the frame"""
+    try:
+        timestr = frame[1:18].decode('cp1252')
+        # ddmmyyyyhhmmss000
+        day = int(timestr[0:2])
+        month = int(timestr[2:4])
+        year = int(timestr[4:8])
+        hour = int(timestr[8:10])
+        mins = int(timestr[10:12])
+        sec = int(timestr[12:14])
+        ms = int(timestr[14:17])
+        return dt.datetime(year, month, day, hour, mins, sec, ms)
+    except:
+        return sdt.datetime(0, 0, 0, 0, 0, 0, 0)
+
+
+def get_type(frame):
+    """ set the type of frame"""
+    try:
+        d = frame[0]
+        if d == DB_FRAME :
+            ftype = DB
+        else:
+            ftype = DATA
+    except:
+        ftype = DATA
+    return ftype
+
+
+def get_data(frame):
+    """ Get the data part of the frame"""
+    try:
+        return frame[27:]
+    except:
+        return bytes()
+
+def get_hnparms(frame):
+    """ returns the no. of parameters acc to haeders """
+    try:
+        return int(frame[18:22].decode('cp1252'))
+    except:
+        return 0
