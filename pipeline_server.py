@@ -24,22 +24,19 @@ class PipelineServer:
     # The pipeline server
     def __init__(self):
         """ Initiate a pipeline server and listens for connections for ever"""
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as \
         self.PipelineSocket:
             self.PipelineSocket.setsockopt(socket.SOL_SOCKET,
                     socket.SO_REUSEADDR, 1)
-            self.PipelineSocket.bind(ADDR)
+            self.PipelineSocket.bind(self.ADDR)
             while True:
-                try:
                     self.PipelineSocket.listen()
-                    print("listening for connection at {}:{}",
-                            format(ADDR[0],ADDR[1]))
-                    tdacs_sock, address = PipelineSocket.accept()
-                    print("Connected to {}:{}".format(address[0],address[1]))
+                    print("listening for connection at {}:{}".format(self.ADDR[0],
+                        str(self.ADDR[1])))
+                    tdacs_sock, address = self.PipelineSocket.accept()
+                    print("Connected to {}:{}".format(address[0],str(address[1])))
+                    print("Sending data to {}:{}".format(address[0],str(address[1])))
                     self.handle_tdacs(tdacs_sock)
-                    print("Sending data to {}:{}".format(address[0],address[1]))
-                except:
-                    break
 
     def handle_tdacs(self, tdacs_sock):
         """ Handles the tdacs client """
