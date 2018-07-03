@@ -17,7 +17,7 @@ class PipelineServer:
     ADDR, SLEEP_TIME = config.pipeline_config()   # Addr and sleeptime pipeline
 
     # Set up the client branches
-    cb.setup_clientbranches(n, addr_list, lock_list)
+    cb.setup_clientbranches(n, addr_list, lock_list, st_list)
 
     nparms = sum(nparms_list)
 
