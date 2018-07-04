@@ -31,7 +31,7 @@ def get_frame(nparms):
             '0'.encode('cp1252'))
     db = "TxxxNameOfTheSensorUnit B".encode("cp1252")
     data = bytes()
-    if r.random() > 0:
+    if r.random() > 0.1:
         for i in range(nparms):
             data = data + s() + n()
         header = creatheader(nparms, DATA)
@@ -98,8 +98,9 @@ class GCFrame:
     def valid(self, fr):
         """ Returns the truth value of invalidity"""
         try:
-            return ((fr.timestamp > self.old_timestamp) and self.crnparms())
+            return ((fr.timestamp > self.old_timestamp) and self.crnparms(fr))
         except:
+            raise
             return False
 
     def set_invalid(self):
@@ -153,7 +154,7 @@ def get_timestamp(frame):
         ms = int(timestr[14:17])
         return dt.datetime(year, month, day, hour, mins, sec, ms)
     except:
-        return sdt.datetime(0, 0, 0, 0, 0, 0, 0)
+        return dt.datetime(dt.MINYEAR, 1, 1, 0, 0, 0, 0)
 
 
 def get_type(frame):
