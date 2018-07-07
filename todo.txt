@@ -1,4 +1,1 @@
-client_branch.py -- make the function such that it can restart automatically
-	when the gco server is restarted.
-Always getting invalid data
-
+Documentation
