@@ -1,6 +1,7 @@
 \documentclass[12pt, a4paper]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[a4paper, portrait, margin=1in]{geometry}
+\usepackage{listings}
 
 \title{Network application to acquire data from multiple GCO connections and
 	   transmit combined data as a single GCO link to TDACS}
@@ -11,12 +12,48 @@
 \begin{document}
 \maketitle
 \tableofcontents
-\section{Abstract}
-\section{Introduction}
-\section{Application architecture}
-\section{Source Code Documentation}
-\section{Future Scope}
-\section{References}
-\section{Appendix A: Instructions for running the program}
-\section{Appendix B: Ground Checkout communication protocol}
+
+\chapter*{Abstract}
+\par This project is for developing an application to handle multiple satellite
+Thermovac tests at once using a single TDACS system. No changes(Hardware and
+software) in the existing system will be necessary. The application will be
+loaded into a PC connected to both TDACS and Checkout networks.
+
+\chapter{Introduction}
+	\begin{itemize}
+			\item Acquire GCO Data from multiple IP addresses(Multiple Satellites
+					-Multiple Checkout teams).
+			\item Processes the acquired data in to a single stream with the same
+					protocols as received data.
+			\item Send the data stream to TDACS system.
+			\item This ensures the that no hardware or software changes are required
+					for present system for acquiring multiple satellite data other than an
+					additional PC which acquires data and relays the processed data as if it
+					is received from one one GCO.
+			\item An Application which can simulate all the above phenomenon for
+					testing.
+	\end{itemize}
+
+\chapter{Application architecture}
+The System acts as server to the present TDACS(which treats it as GCO itself)
+and as an independent client to each and every GCO system (Satellite GCO).
+
+\chapter{Source Code Documentation}
+\chapter{Future Scope}
+
+\chapter*{References}
+	\begin{itemize}
+			\item Learning Python Network Programming- Dr.M.O. Faruque Sarkar, Sam
+					Washington.
+			\item The Definitive Guide to Linux Network Programming- Keir Davis, John
+					W.Turner and Nathan Yocom.
+			\item Internetworking With TCP/IP vol-III, Client-Server Programming and
+					Applications (BSD Socket Version)-David L. Stevens, Douglas E. comer
+			\item www.python.org
+	\end{itemize}
+
+\chapter*{Appendix A \\Instructions for running the program}
+
+\chapter*{Appendix B \\Ground Checkout communication protocol}
+\input{GC_protocol}
 \end{document}
