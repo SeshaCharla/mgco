@@ -11,13 +11,35 @@ The confuguration of the application is set using 2 configuration files namely:
 	\item pipeline.conf
 \end{enumerate}
 
-\section{.conf files}
+\section{Configuration Files}
+
 \subsection{GC.conf}
 This file will contain the necessary details of the Ground Checkout servers
 including hostname, port, no. of parameters and the sampling time. An example
 of GC.conf is shown as below:
 \lstinputlisting{../GC.conf}
 
-\section{pipeline\_server}
+\subsection{pipeline.conf}
+This file contains the details required for setting up the pipeline server
+including hostname, port and the sampling time. An example of pipeline.conf is
+shown below:
+\lstinputlisting{../pipeline.conf}
+
+
+\section{Python Modules}
+
+\subsection{config}
+This file has 2 functions namely get\_config() and pipeline\_config() which
+parse GC.conf and pipeline.conf respectively an return the configuration
+details in proper object type and format.
+\begin{itemize}
+	\item get\_config([GC.conf]) $->$ int n, (str, int)\_array addrs, int\_array nparms,
+		int\_array st\_list
+	\item pipeline\_config([pipeline.conf]) $->$ (str, int)\_array addrs, int\_array
+		sleeptime
+\end{itemize}
+
+
+\subsection{pipeline\_server}
 This file contains the PipelineServer class which creates a PipelineServer
 object which connects to
