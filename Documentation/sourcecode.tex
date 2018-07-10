@@ -1,0 +1,23 @@
+The main source code spreads across the following python files namely:
+\begin{enumerate}
+	\item pipeline\_server.py
+	\item client\_branch.py
+	\item protocol.py
+	\item config.py
+\end{enumerate}
+The confuguration of the application is set using 2 configuration files namely:
+\begin{enumerate}
+	\item GC.conf
+	\item pipeline.conf
+\end{enumerate}
+
+\section{.conf files}
+\subsection{GC.conf}
+This file will contain the necessary details of the Ground Checkout servers
+including hostname, port, no. of parameters and the sampling time. An example
+of GC.conf is shown as below:
+\lstinputlisting{../GC.conf}
+
+\section{pipeline\_server}
+This file contains the PipelineServer class which creates a PipelineServer
+object which connects to
