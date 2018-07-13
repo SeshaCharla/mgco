@@ -3,6 +3,7 @@ The main source code spreads across the following python files namely:
 	\item pipeline\_server.py
 	\item client\_branch.py
 	\item protocol.py
+	\item fileilockio.py
 	\item config.py
 \end{enumerate}
 The confuguration of the application is set using 2 configuration files namely:
@@ -28,16 +29,27 @@ shown below:
 
 \section{Python Modules}
 
-\subsection{config}
-This file has 2 functions namely get\_config() and pipeline\_config() which
+\subsection{config.py}
+This file has 2 functions namely $get\_config()$ and $pipeline\_config()$ which
 parse GC.conf and pipeline.conf respectively an return the configuration
 details in proper object type and format.
-\begin{itemize}
-	\item get\_config([GC.conf]) $->$ int n, (str, int)\_array addrs, int\_array nparms,
-		int\_array st\_list
-	\item pipeline\_config([pipeline.conf]) $->$ (str, int)\_array addrs, int\_array
-		sleeptime
-\end{itemize}
+%\begin{itemize}
+%	\item get\_config([GC.conf]) $->$ int n, (str, int)\_array addrs, int\_array nparms,
+%		int\_array st\_list
+%	\item pipeline\_config([pipeline.conf]) $->$ (str, int)\_array addrs, int\_array
+%		sleeptime
+%\end{itemize}
+
+
+\subsection{filelockio.py}
+This file has 2 functions namely $filelockread()$ and $filelockwrite()$ which read
+and write in to files with a lock in place while reading or writing to avoid
+simultaneous reading and writhing by different processes.
+
+
+\subsection{protocol.py}
+This file contains the functions and classes for creating and manipulating the
+Ground Checkout data frames. The various contents of the file are listed below:
 
 
 \subsection{pipeline\_server}
