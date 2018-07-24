@@ -8,6 +8,7 @@ from multiprocessing import Process, Lock
 import config
 from filelockio import filelockwrite
 import time
+import basiclogging as lg
 
 
 def client_branch(addr, lock, st):
@@ -52,9 +53,14 @@ def inf_client_branch(addr, lock, st):
         try:
             client_branch(addr, lock, st)
         except OSError or ConnectionError:
-            print("TimeOutError: GCO Server not responding")
+            msg1 = "TimeOutError: GCO Server not responding"
+            print(msg1)
+            lg.log(msg1, addr, level=3)
             time.sleep(st)
-            print("Restarting the client to {}".format(addr[0]))
+            msg2 = "Restarting the client to {}:{}".format(addr[0],
+                    str(addr[1]))
+            print(msg2)
+            lg.log(msg2, addr, level=1)
             continue
         except KeyboardInterrupt:
             break
