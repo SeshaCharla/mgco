@@ -5,6 +5,7 @@ The main source code spreads across the following python files namely:
 	\item protocol.py
 	\item fileilockio.py
 	\item config.py
+	\item basiclogging.py
 \end{enumerate}
 The confuguration of the application is set using 2 configuration files namely:
 \begin{enumerate}
@@ -29,6 +30,12 @@ shown below:
 
 \section{Python Modules}
 
+\subsection{basiclogging}
+The file contains the function necessary for logging the events in various
+processes.\\
+$log$(message, address, log-level) : Logs the message
+in to a file named after the GC server to which the client is connected to.
+
 \subsection{config.py}
 This file has 2 functions namely $get\_config()$ and $pipeline\_config()$ which
 parse GC.conf and pipeline.conf respectively an return the configuration
@@ -48,8 +55,58 @@ simultaneous reading and writhing by different processes.
 
 
 \subsection{protocol.py}
-This file contains the functions and classes for creating and manipulating the
-Ground Checkout data frames. The various contents of the file are listed below:
+This file has the necessary functions for reading and writing data in GCO
+protocol. cp1252 encoding is used as '$\backslash$xbb' and '$\backslash$xcc' are represented by
+corresponding hex numbers unlike utf-8 where it is split in to 2 hex nos.\\
+The following are the functions and classes defined in the file:
+\begin{enumerate}
+	\item $get\_frame$(no. of parameters) : Randomly generates a
+		frame with given no. of parameters and returns the encoded bytes.
+		The type of frame is also decided randomly.
+	\item $creatheader$(no. of parameters, frame type) : Returns
+		the encoded header bytes depending on the time of calling and the frame
+		type and the no. of parameters.
+	\item $setframetype$(GC frame list) : Returns the type of frame to be
+		assigned to the concatenated GC data.
+	\item $GCFrame$ : Class for creating frame objects for storing current
+		data.
+		\begin{enumerate}
+			\item $self._\_init\_\_$(no. of parameters) : Creates the following
+				attributes for the object:
+				\begin{itemize}
+					\item $self.nparms$ : Number of parameters in the frame
+					\item $self.invalid\_data$ : Invalid data stream
+					\item $self.old\_timestamp$ : Previous tiem stamp of the
+						data
+					\item $self.type$ : Type of data
+					\item $self.data$ : Data extracted from the current frame
+				\end{itemize}
+			\item $self.update\_frame$(frame) : Updates the object with the newly
+				received frame after checking the validity.
+			\item $self.valid$(Frame object) : Checks the validity of the frame.
+			\item $self.set\_invalid$ : Makes the data invalid.
+			\item $self.crnparms$(Frame object) : Checks if the no. of parameters
+				is consistent.
+		\end{enumerate}
+	\item $Frame$ : Class for creating frame objects which are nothing but data
+		structures to store the frame.
+		\begin{enumerate}
+			\item $self.\_\_init\_\_$(frame) : Initiates the following attributes:
+				\begin{itemize}
+					\item self.type : Type of frame.
+					\item self. timestamp : Time stamp on the frame.
+					\item self.data : Data in the frame.
+					\item self.hnparms : Number of parameters declared in the
+						frame header.
+				\end{itemize}
+		\end{enumerate}
+	\item $geti\_tiemstamp$(frame) : Returns the time stamp from the frame.
+	\item $get\_type$(frame) : Returns the type of the frame.
+	\item $get\_data$(frame) : Returns the in the frame.
+	\item $get\_hnparms$(frame) : Returns the number of parameters declared in
+		the frame header.
+\end{enumerate}
+
 
 
 \subsection{pipeline\_server}
