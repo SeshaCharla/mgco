@@ -15,7 +15,7 @@ def log(msg, addr, level=0):
     # 4 - WARNING
 
     fname = '{}_{}.log'.format(addr[0], str(addr[1]))
-    logging.config(filename=fname, filemode='a', level=logging.DEBUG,
+    logging.basicConfig(filename=fname, filemode='a', level=logging.DEBUG,
                     format='%(asctime)s ; %(levelname)s ; %(message)s',
                     datefmt='%m/%d/%Y %I:%M:%S %p')
     if level==0:
