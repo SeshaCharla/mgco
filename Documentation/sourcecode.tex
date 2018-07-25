@@ -108,6 +108,23 @@ The following are the functions and classes defined in the file:
 \end{enumerate}
 
 
+\subsection{client\_branch.py}
+The file contains the functions to set up the multi-processig client branch.
+The functions in the file are as follows:
+\begin{enumerate}
+	\item $client\_branch$(Server address, lock object, sleep time) : The
+		function creates a socket in the machine to receive data from the
+		server whose address is mentioned and writes it in to a file with a
+		lock using $filelockwrite()$ function. It takes care of reading a full
+		frame from a TCP buffer.
+	\item $inf\_client\_branch$(Server address, lock object, sleep time) : This
+		function creates a client socket which closes when am exception occurs
+		and opens a new socket again to connect to the server.
+	\item $setup\_clientbranches$(number of servers, list of server addresses,
+		list of lock objects, list of sleep times) : This function sets up a
+		client branch in a separate process using the lists passed.
+\end{enumerate}
+
 
 \subsection{pipeline\_server}
 This file contains the PipelineServer class which creates a PipelineServer
