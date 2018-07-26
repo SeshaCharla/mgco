@@ -55,7 +55,7 @@ loaded into a PC connected to both TDACS and Checkout networks.
 
 \par The current TDACS system is capable of handling data from a single
 Checkout team and by extension only from one satellite. This makes simultaneous
-Thermo-vac testing of multiple satellites cumbersome and error prone. Io order
+Thermo-vac testing of multiple satellites cumbersome and error prone. In order
 to overcome that bottleneck a network-merge application is designed which can
 trick TDACS to process and store multiple satellite data as a single satellite
 data. The user should have necessary naming conventions to differentiate the
@@ -71,7 +71,7 @@ data from different satellite. The scope of the current project is listed below:
 					for present system for acquiring multiple satellite data other than an
 					additional PC which acquires data and relays the processed data as if it
 					is received from one one GCO.
-			\item An Application which can simulate all the above phenomenon for
+			\item An Application which can simulate all the above phenomena for
 					testing.
 	\end{enumerate}
 
@@ -87,7 +87,7 @@ and as an independent client to each and every GCO system (Satellite GCO).
 \end{figure}
 
 \par The above figure shows how the application handles multiple satellite data
-and how it connests to the TDACS and also the Ground Checkout Systems. The
+and how it connects to the TDACS and also the Ground Checkout Systems. The
 application spawns off a client branch for every ground checkout server and
 writes the data in to a .dat file named after the server's address(HOST\_PORT).
 Then the Pipeline Server sequentially reads each of those files concatenates
@@ -98,7 +98,7 @@ the data and sends it to the TDACS.
 
 
 \chapter{Future Scope}
-\par The folllowing augmentations to the current project are suggested:
+\par The following augmentations to the current project are suggested:
 \begin{enumerate}
 	\item Include a database which stores the incoming data by reading the
 		files at specified intervals of time. An SQLite3 database would be

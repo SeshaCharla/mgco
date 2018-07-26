@@ -17,13 +17,13 @@ The confuguration of the application is set using 2 configuration files namely:
 
 \subsection{GC.conf}
 This file will contain the necessary details of the Ground Checkout servers
-including hostname, port, no. of parameters and the sampling time. An example
+including host-name, port, number of parameters and the sampling time. An example
 of GC.conf is shown as below:
 \lstinputlisting{../GC.conf}
 
 \subsection{pipeline.conf}
 This file contains the details required for setting up the pipeline server
-including hostname, port and the sampling time. An example of pipeline.conf is
+including host-name, port and the sampling time. An example of pipeline.conf is
 shown below:
 \lstinputlisting{../pipeline.conf}
 
@@ -56,27 +56,28 @@ simultaneous reading and writhing by different processes.
 
 \subsection{protocol.py}
 This file has the necessary functions for reading and writing data in GCO
-protocol. cp1252 encoding is used as '$\backslash$xbb' and '$\backslash$xcc' are represented by
-corresponding hex numbers unlike utf-8 where it is split in to 2 hex nos.\\
+protocol. The cp1252 encoding is used as '$\backslash$xbb' and
+'$\backslash$xcc' are represented by corresponding hex numbers unlike utf-8
+where it is split in to 2 hex numbers.\\
 The following are the functions and classes defined in the file:
 \begin{enumerate}
-	\item $get\_frame$(no. of parameters) : Randomly generates a
-		frame with given no. of parameters and returns the encoded bytes.
+	\item $get\_frame$(number of parameters) : Randomly generates a
+		frame with given number of parameters and returns the encoded bytes.
 		The type of frame is also decided randomly.
-	\item $creatheader$(no. of parameters, frame type) : Returns
+	\item $creatheader$(number of parameters, frame type) : Returns
 		the encoded header bytes depending on the time of calling and the frame
-		type and the no. of parameters.
+		type and the number of parameters.
 	\item $setframetype$(GC frame list) : Returns the type of frame to be
 		assigned to the concatenated GC data.
 	\item $GCFrame$ : Class for creating frame objects for storing current
 		data.
 		\begin{enumerate}
-			\item $self._\_init\_\_$(no. of parameters) : Creates the following
+			\item $self._\_init\_\_$(number of parameters) : Creates the following
 				attributes for the object:
 				\begin{itemize}
 					\item $self.nparms$ : Number of parameters in the frame
 					\item $self.invalid\_data$ : Invalid data stream
-					\item $self.old\_timestamp$ : Previous tiem stamp of the
+					\item $self.old\_timestamp$ : Previous time stamp of the
 						data
 					\item $self.type$ : Type of data
 					\item $self.data$ : Data extracted from the current frame
@@ -85,7 +86,7 @@ The following are the functions and classes defined in the file:
 				received frame after checking the validity.
 			\item $self.valid$(Frame object) : Checks the validity of the frame.
 			\item $self.set\_invalid$ : Makes the data invalid.
-			\item $self.crnparms$(Frame object) : Checks if the no. of parameters
+			\item $self.crnparms$(Frame object) : Checks if the number of parameters
 				is consistent.
 		\end{enumerate}
 	\item $Frame$ : Class for creating frame objects which are nothing but data
@@ -100,7 +101,7 @@ The following are the functions and classes defined in the file:
 						frame header.
 				\end{itemize}
 		\end{enumerate}
-	\item $geti\_tiemstamp$(frame) : Returns the time stamp from the frame.
+	\item $get\_timestamp$(frame) : Returns the time stamp from the frame.
 	\item $get\_type$(frame) : Returns the type of the frame.
 	\item $get\_data$(frame) : Returns the in the frame.
 	\item $get\_hnparms$(frame) : Returns the number of parameters declared in
@@ -109,7 +110,7 @@ The following are the functions and classes defined in the file:
 
 
 \subsection{client\_branch.py}
-The file contains the functions to set up the multi-processig client branch.
+The file contains the functions to set up the multi-processing client branch.
 The functions in the file are as follows:
 \begin{enumerate}
 	\item $client\_branch$(Server address, lock object, sleep time) : The
@@ -132,12 +133,12 @@ object which connects to which sets up the entire application including the
 client branches, the server, files and the lock objects. The details are given
 below:
 \begin{enumerate}
-	\item PipelineServer : This class creates instances of the applivation.
+	\item PipelineServer : This class creates instances of the application.
 		\begin{enumerate}
 		\item $self.\_\_init\_\_$ : This method initiates a pipeline server and
 			listens for connections forever.
 		\item $handle\_tdacs$(TDACS Socket) : This method reads the data from
-			the files and concatenats it in to a single stream and sends to the
+			the files and concatenates it in to a single stream and sends to the
 			TDACS for a pre-defined sleep time.
 		\end{enumerate}
 \end{enumerate}
