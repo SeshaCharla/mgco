@@ -46,7 +46,7 @@
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{\numberline{}Abstract}
 \par This project is for developing an application to handle multiple satellite
-Thermovac tests at once using a single TDACS system. No changes(Hardware and
+Thermovac tests at once using a single TDACS system. No changes (hardware and
 software) in the existing system will be necessary. The application will be
 loaded into a PC connected to both TDACS and Checkout networks.
 
@@ -54,15 +54,15 @@ loaded into a PC connected to both TDACS and Checkout networks.
 \chapter{Introduction}
 
 \par The current TDACS system is capable of handling data from a single
-Checkout team and by extension only from one satellite. This makes simultaneous
+checkout team and by extension only from one satellite. This makes simultaneous
 Thermo-vac testing of multiple satellites cumbersome and error prone. In order
-to overcome that bottleneck a network-merge application is designed which can
+to overcome this bottleneck a network-merge application is designed which can
 trick TDACS to process and store multiple satellite data as a single satellite
 data. The user should have necessary naming conventions to differentiate the
-data from different satellite. The scope of the current project is listed below:
+data from different satellites. The scope of the current project is listed below:
 
 	\begin{enumerate}
-			\item Acquire GCO Data from multiple IP addresses(Multiple Satellites
+			\item Acquire GCO Data from multiple IP addresses (Multiple Satellites
 					-Multiple Checkout teams).
 			\item Processes the acquired data in to a single stream with the same
 					protocols as received data.
@@ -77,8 +77,8 @@ data from different satellite. The scope of the current project is listed below:
 
 
 \chapter{Application architecture}
-The System acts as server to the present TDACS(which treats it as GCO itself)
-and as an independent client to each and every GCO system (Satellite GCO).
+The System acts as server to the present TDACS (which treats it as GCO itself)
+and has an independent client to each and every GCO server (Satellite).
 
 \begin{figure}[!h]
 	\centering
@@ -87,9 +87,9 @@ and as an independent client to each and every GCO system (Satellite GCO).
 \end{figure}
 
 \par The above figure shows how the application handles multiple satellite data
-and how it connects to the TDACS and also the Ground Checkout Systems. The
+and how it connects to the TDACS and also the ground checkout servers. The
 application spawns off a client branch for every ground checkout server and
-writes the data in to a .dat file named after the server's address(HOST\_PORT).
+writes the data in to a .dat file named after the server's address (host\_port).
 Then the Pipeline Server sequentially reads each of those files concatenates
 the data and sends it to the TDACS.
 

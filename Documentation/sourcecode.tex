@@ -1,4 +1,4 @@
-The main source code spreads across the following python files namely:
+The main source code spreads across the following python files:
 \begin{enumerate}
 	\item pipeline\_server.py
 	\item client\_branch.py
@@ -16,7 +16,7 @@ The confuguration of the application is set using 2 configuration files namely:
 \section{Configuration Files}
 
 \subsection{GC.conf}
-This file will contain the necessary details of the Ground Checkout servers
+This file will contain the necessary details of the ground checkout servers
 including host-name, port, number of parameters and the sampling time. An example
 of GC.conf is shown as below:
 \lstinputlisting{../GC.conf}
@@ -32,9 +32,12 @@ shown below:
 
 \subsection{basiclogging.py}
 The file contains the function necessary for logging the events in various
-processes.\\
-$log$(message, address, log-level) : Logs the message
-in to a file named after the GC server to which the client is connected to.
+processes.
+\begin{itemize}
+	\item $log$(message, address, log-level) : Logs the message
+			into a file named after the GC server to which the client is
+			connected to.
+\end{itemize}
 
 \subsection{config.py}
 This file has 2 functions namely $get\_config()$ and $pipeline\_config()$ which
@@ -50,15 +53,15 @@ details in proper object type and format.
 
 \subsection{filelockio.py}
 This file has 2 functions namely $filelockread()$ and $filelockwrite()$ which read
-and write in to files with a lock in place while reading or writing to avoid
-simultaneous reading and writhing by different processes.
+and write into files with a lock in place while reading or writing to avoid
+simultaneous reading and writing by different processes.
 
 
 \subsection{protocol.py}
 This file has the necessary functions for reading and writing data in GCO
-protocol. The cp1252 encoding is used as '$\backslash$xbb' and
+protocol. The cp1252 encoding is used, as '$\backslash$xbb' and
 '$\backslash$xcc' are represented by corresponding hex numbers unlike utf-8
-where it is split in to 2 hex numbers.\\
+where it is split into 2 hex numbers.\\
 The following are the functions and classes defined in the file:
 \begin{enumerate}
 	\item $get\_frame$(number of parameters) : Randomly generates a
@@ -83,7 +86,7 @@ The following are the functions and classes defined in the file:
 					\item $self.data$ : Data extracted from the current frame
 				\end{itemize}
 			\item $self.update\_frame$(frame) : Updates the object with the newly
-				received frame after checking the validity.
+				received frame after checking its validity.
 			\item $self.valid$(Frame object) : Checks the validity of the frame.
 			\item $self.set\_invalid$ : Makes the data invalid.
 			\item $self.crnparms$(Frame object) : Checks if the number of parameters
@@ -103,7 +106,7 @@ The following are the functions and classes defined in the file:
 		\end{enumerate}
 	\item $get\_timestamp$(frame) : Returns the time stamp from the frame.
 	\item $get\_type$(frame) : Returns the type of the frame.
-	\item $get\_data$(frame) : Returns the in the frame.
+	\item $get\_data$(frame) : Returns the data in the frame.
 	\item $get\_hnparms$(frame) : Returns the number of parameters declared in
 		the frame header.
 \end{enumerate}
@@ -115,21 +118,21 @@ The functions in the file are as follows:
 \begin{enumerate}
 	\item $client\_branch$(Server address, lock object, sleep time) : The
 		function creates a socket in the machine to receive data from the
-		server whose address is mentioned and writes it in to a file with a
+		server whose address is mentioned and writes it into a file with a
 		lock using $filelockwrite()$ function. It takes care of reading a full
 		frame from a TCP buffer.
 	\item $inf\_client\_branch$(Server address, lock object, sleep time) : This
 		function creates a client socket which closes when am exception occurs
 		and opens a new socket again to connect to the server.
 	\item $setup\_clientbranches$(number of servers, list of server addresses,
-		list of lock objects, list of sleep times) : This function sets up a
-		client branch in a separate process using the lists passed.
+		list of lock objects, list of sleep times) : This function sets up
+		client branches in a separate processes using the lists passed.
 \end{enumerate}
 
 
 \subsection{pipeline\_server}
 This file contains the PipelineServer class which creates a PipelineServer
-object which connects to which sets up the entire application including the
+object which sets up the entire application including the
 client branches, the server, files and the lock objects. The details are given
 below:
 \begin{enumerate}
@@ -138,8 +141,8 @@ below:
 		\item $self.\_\_init\_\_$ : This method initiates a pipeline server and
 			listens for connections forever.
 		\item $handle\_tdacs$(TDACS Socket) : This method reads the data from
-			the files and concatenates it in to a single stream and sends to the
-			TDACS for a pre-defined sleep time.
+			the files and concatenates it into a single stream and sends to the
+			TDACS at a pre-defined time interval.
 		\end{enumerate}
 \end{enumerate}
 
