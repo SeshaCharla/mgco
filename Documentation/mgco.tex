@@ -3,6 +3,7 @@
 \usepackage[a4paper, portrait, margin=1in]{geometry}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{graphicx}
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -41,11 +42,14 @@
 \maketitle
 \tableofcontents
 
+
 \chapter*{Abstract}
+\addcontentsline{toc}{chapter}{\numberline{}Abstract}
 \par This project is for developing an application to handle multiple satellite
 Thermovac tests at once using a single TDACS system. No changes(Hardware and
 software) in the existing system will be necessary. The application will be
 loaded into a PC connected to both TDACS and Checkout networks.
+
 
 \chapter{Introduction}
 	\begin{itemize}
@@ -62,15 +66,38 @@ loaded into a PC connected to both TDACS and Checkout networks.
 					testing.
 	\end{itemize}
 
+
 \chapter{Application architecture}
 The System acts as server to the present TDACS(which treats it as GCO itself)
 and as an independent client to each and every GCO system (Satellite GCO).
 
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.4]{arch.pdf}
+	\caption{Architecture of the application}
+\end{figure}
+
+
 \chapter{Source Code Documentation}
 \input{sourcecode}
+
+
 \chapter{Future Scope}
+\par The folllowing augmentations to the current project are suggested:
+\begin{enumerate}
+	\item Include a database which stores the incoming data by reading the
+		files at specified intervals of time. An SQLite3 database would be
+		ideal.
+	\item Include real-time plotting feature on to the database using Pandas
+		and Matplotlib.
+	\item Augment the protocol to get more satellite data and store it in the
+		database while sending only part of it which is in accordance with the
+		TDACS protocol.
+\end{enumerate}
+
 
 \chapter*{References}
+\addcontentsline{toc}{chapter}{\numberline{}References}
 	\begin{itemize}
 			\item Learning Python Network Programming- Dr.M.O. Faruque Sarkar, Sam
 					Washington.
@@ -81,8 +108,16 @@ and as an independent client to each and every GCO system (Satellite GCO).
 			\item www.python.org
 	\end{itemize}
 
-\chapter*{Appendix A \\Instructions for running the program}
+\appendix
+\chapter*{Appendix A: Instructions for running the program}
+\addcontentsline{toc}{chapter}{\numberline{}Appendix A: Instructions for
+running the program}
 \input{instructions}
-\chapter*{Appendix B \\Ground Checkout communication protocol}
+
+
+\chapter*{Appendix B: Ground Checkout communication protocol}
+\addcontentsline{toc}{chapter}{\numberline{}Appendix B: Ground Checkout communication protocol}
 \input{GC_protocol}
+
+
 \end{document}

@@ -128,4 +128,17 @@ The functions in the file are as follows:
 
 \subsection{pipeline\_server}
 This file contains the PipelineServer class which creates a PipelineServer
-object which connects to
+object which connects to which sets up the entire application including the
+client branches, the server, files and the lock objects. The details are given
+below:
+\begin{enumerate}
+	\item PipelineServer : This class creates instances of the applivation.
+		\begin{enumerate}
+		\item $self.\_\_init\_\_$ : This method initiates a pipeline server and
+			listens for connections forever.
+		\item $handle\_tdacs$(TDACS Socket) : This method reads the data from
+			the files and concatenats it in to a single stream and sends to the
+			TDACS for a pre-defined sleep time.
+		\end{enumerate}
+\end{enumerate}
+
