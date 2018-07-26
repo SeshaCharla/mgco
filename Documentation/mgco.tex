@@ -52,7 +52,16 @@ loaded into a PC connected to both TDACS and Checkout networks.
 
 
 \chapter{Introduction}
-	\begin{itemize}
+
+\par The current TDACS system is capable of handling data from a single
+Checkout team and by extension only from one satellite. This makes simultaneous
+Thermo-vac testing of multiple satellites cumbersome and error prone. Io order
+to overcome that bottleneck a network-merge application is designed which can
+trick TDACS to process and store multiple satellite data as a single satellite
+data. The user should have necessary naming conventions to differentiate the
+data from different satellite. The scope of the current project is listed below:
+
+	\begin{enumerate}
 			\item Acquire GCO Data from multiple IP addresses(Multiple Satellites
 					-Multiple Checkout teams).
 			\item Processes the acquired data in to a single stream with the same
@@ -64,7 +73,7 @@ loaded into a PC connected to both TDACS and Checkout networks.
 					is received from one one GCO.
 			\item An Application which can simulate all the above phenomenon for
 					testing.
-	\end{itemize}
+	\end{enumerate}
 
 
 \chapter{Application architecture}
@@ -77,6 +86,12 @@ and as an independent client to each and every GCO system (Satellite GCO).
 	\caption{Architecture of the application}
 \end{figure}
 
+\par The above figure shows how the application handles multiple satellite data
+and how it connests to the TDACS and also the Ground Checkout Systems. The
+application spawns off a client branch for every ground checkout server and
+writes the data in to a .dat file named after the server's address(HOST\_PORT).
+Then the Pipeline Server sequentially reads each of those files concatenates
+the data and sends it to the TDACS.
 
 \chapter{Source Code Documentation}
 \input{sourcecode}
