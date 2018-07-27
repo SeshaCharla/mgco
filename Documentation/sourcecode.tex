@@ -3,7 +3,7 @@ The main source code spreads across the following python files:
 	\item pipeline\_server.py
 	\item client\_branch.py
 	\item protocol.py
-	\item fileilockio.py
+	\item filelockio.py
 	\item config.py
 	\item basiclogging.py
 \end{enumerate}
@@ -41,7 +41,7 @@ processes.
 
 \subsection{config.py}
 This file has 2 functions namely $get\_config()$ and $pipeline\_config()$ which
-parse GC.conf and pipeline.conf respectively an return the configuration
+parse GC.conf and pipeline.conf respectively and return the configuration
 details in proper object type and format.
 %\begin{itemize}
 %	\item get\_config([GC.conf]) $->$ int n, (str, int)\_array addrs, int\_array nparms,
@@ -98,7 +98,7 @@ The following are the functions and classes defined in the file:
 			\item $self.\_\_init\_\_$(frame) : Initiates the following attributes:
 				\begin{itemize}
 					\item self.type : Type of frame.
-					\item self. timestamp : Time stamp on the frame.
+					\item self.timestamp : Time stamp on the frame.
 					\item self.data : Data in the frame.
 					\item self.hnparms : Number of parameters declared in the
 						frame header.
@@ -122,7 +122,7 @@ The functions in the file are as follows:
 		lock using $filelockwrite()$ function. It takes care of reading a full
 		frame from a TCP buffer.
 	\item $inf\_client\_branch$(Server address, lock object, sleep time) : This
-		function creates a client socket which closes when am exception occurs
+		function creates a client socket which closes when an exception occurs
 		and opens a new socket again to connect to the server.
 	\item $setup\_clientbranches$(number of servers, list of server addresses,
 		list of lock objects, list of sleep times) : This function sets up
