@@ -12,7 +12,8 @@ import datetime as dt
 n, addr_list, nparms_list, st_list = config.get_config()
 lock = Lock()
 frame = p.GCFrame(nparms_list[0])
-hnames = open('htrs.txt').readlines()
+with open('htrs.txt') as hl:
+    hnames = hl.readlines()
 hlist = [i[:-1] for i in hnames]
 while True:
     string  = filelockread(addr_list[0], lock)
