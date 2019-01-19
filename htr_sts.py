@@ -19,7 +19,7 @@ while True:
     string  = filelockread(addr_list[0], lock)
     if frame.valid(p.Frame(string)):
         frame.update_frame(string)
-        status_str = frame.data[(-14*8):].decode('cp1252')
+        status_str = frame.data[(-13*8):].decode('cp1252')
         htr_sts = [status_str[8*i:8*(i+1)] for i in range(int(len(status_str)/8))]
         htr_sts_dict = dict(zip(hlist, htr_sts))
         print('\n \n')
