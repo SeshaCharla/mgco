@@ -1,25 +1,10 @@
 #!vim: fileencoding=utf-8
 
 
-import protocol as p
-import config
-from multiprocessing import Lock
-from filelockio import filelockread
-import time
-import datetime as dt
 import pickle
+import matplotlib.pyplot as plt
 
-def stat(sts):
-    if sts == 'Htr-On  ':
-        return 1
-    elif sts == 'Htr-Off ':
-        return 0
-    else:
-        return 0
 
-n, addr_list, nparms_list, st_list = config.get_config()
-lock = Lock()
-frame = p.GCFrame(nparms_list[0])
 with open('htrs.txt') as hl:
     hnames = hl.readlines()
 hlist = [i[:-1] for i in hnames]
@@ -40,4 +25,10 @@ try:
 except:
     pass
 
+for htr in hlist:
+    i = hlist.index(htr)
+    plt.figure(i)
+    plt.plot(t, status[i], label = htr)
+    plt.legend()
 
+plt.show()
