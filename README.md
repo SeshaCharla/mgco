@@ -1,3 +1,2 @@
 # mgco
-mgco
-Multiple satellite thermal data acquision.
+mgco - Multiple Ground Checkouts for multiple satellite thermal data acquision.
